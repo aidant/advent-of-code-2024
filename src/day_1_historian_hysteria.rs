@@ -1,5 +1,4 @@
 use std::{
-    collections::HashMap,
     fs::File,
     io::{BufRead, BufReader},
 };
@@ -47,20 +46,20 @@ pub fn part_1(left: &Vec<i32>, right: &Vec<i32>) -> Result<i32, anyhow::Error> {
 }
 
 pub fn part_2(left: &Vec<i32>, right: &Vec<i32>) -> Result<i32, anyhow::Error> {
-    let mut lut = HashMap::<i32, i32>::new();
+    let max = right.iter().max().ok_or(anyhow!("cannot find max value"))?;
+    let mut lut = vec![0; *max as usize + 1];
 
-    for r in right {
-        match lut.get(r) {
-            None => lut.insert(r.to_owned(), 1),
-            Some(count) => lut.insert(r.to_owned(), count + 1),
-        };
+    for &value in right {
+        lut[value as usize] += 1;
     }
 
     let mut total_similarity = 0;
 
-    for l in left {
-        if let Some(count) = lut.get(l) {
-            total_similarity += l * count;
+    for &value in left {
+        let index = value as usize;
+
+        if index < lut.len() {
+            total_similarity += value * lut[index];
         }
     }
 

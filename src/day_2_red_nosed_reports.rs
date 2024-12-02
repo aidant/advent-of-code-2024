@@ -1,12 +1,8 @@
 use std::{
-    any,
     fs::File,
     io::{BufRead, BufReader},
     num::ParseIntError,
-    result,
 };
-
-use anyhow::anyhow;
 
 pub fn prepare_input() -> Result<Vec<Vec<u8>>, anyhow::Error> {
     let mut result = vec![];
@@ -31,7 +27,7 @@ pub fn prepare_input() -> Result<Vec<Vec<u8>>, anyhow::Error> {
 pub fn is_pair_valid(is_ascending: &mut Option<bool>, a: u8, b: u8) -> bool {
     let delta = if a > b { a - b } else { b - a };
 
-    if delta < 1 || delta > 3 {
+    if !(1..=3).contains(&delta) {
         return false;
     }
 
@@ -52,7 +48,7 @@ pub fn is_pair_valid(is_ascending: &mut Option<bool>, a: u8, b: u8) -> bool {
     true
 }
 
-pub fn is_row_valid(row: Vec<u8>) -> bool {
+pub fn is_row_valid(row: &[u8]) -> bool {
     let mut is_ascending: Option<bool> = None;
 
     for index in 1..row.len() {
@@ -68,19 +64,19 @@ pub fn is_row_valid(row: Vec<u8>) -> bool {
 }
 
 fn is_input_valid(
-    input: Vec<Vec<u8>>,
+    input: &Vec<Vec<u8>>,
     enable_problem_dampener: bool,
 ) -> Result<u32, anyhow::Error> {
     let mut safe_count = 0;
 
     for row in input {
-        if is_row_valid(row.clone()) {
+        if is_row_valid(row) {
             safe_count += 1;
         } else if enable_problem_dampener {
             for index in 0..row.len() {
-                let mut row = row.clone();
+                let mut row = row.to_vec();
                 row.remove(index);
-                if is_row_valid(row) {
+                if is_row_valid(&row) {
                     safe_count += 1;
                     break;
                 }
@@ -91,23 +87,31 @@ fn is_input_valid(
     Ok(safe_count)
 }
 
-pub fn part_1(input: Vec<Vec<u8>>) -> Result<u32, anyhow::Error> {
+pub fn part_1(input: &Vec<Vec<u8>>) -> Result<u32, anyhow::Error> {
     is_input_valid(input, false)
 }
 
-pub fn part_2(input: Vec<Vec<u8>>) -> Result<u32, anyhow::Error> {
+pub fn part_2(input: &Vec<Vec<u8>>) -> Result<u32, anyhow::Error> {
     is_input_valid(input, true)
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
+    extern crate test;
+    use test::Bencher;
 
     #[test]
     fn part_1_test() {
         let day_2 = prepare_input().unwrap();
-        let answer = part_1(day_2).unwrap();
+        let answer = part_1(&day_2).unwrap();
         assert_eq!(answer, 686);
+    }
+
+    #[bench]
+    fn part_1_bench(b: &mut Bencher) {
+        let day_2 = prepare_input().unwrap();
+        b.iter(|| part_1(&day_2).unwrap())
     }
 
     #[test]
@@ -120,14 +124,20 @@ mod test {
             vec![8, 6, 4, 4, 1],
             vec![1, 3, 6, 7, 9],
         ];
-        let answer = part_2(example).unwrap();
+        let answer = part_2(&example).unwrap();
         assert_eq!(answer, 4);
     }
 
     #[test]
     fn part_2_test() {
         let day_2 = prepare_input().unwrap();
-        let answer = part_2(day_2).unwrap();
+        let answer = part_2(&day_2).unwrap();
         assert_eq!(answer, 717);
+    }
+
+    #[bench]
+    fn part_2_bench(b: &mut Bencher) {
+        let day_2 = prepare_input().unwrap();
+        b.iter(|| part_2(&day_2).unwrap())
     }
 }

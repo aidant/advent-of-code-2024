@@ -1,5 +1,4 @@
 #![feature(test)]
-#![feature(let_chains)]
 
 mod day_1_historian_hysteria;
 mod day_2_red_nosed_reports;
@@ -18,7 +17,10 @@ fn main() {
     let day_2 = day_2_red_nosed_reports::prepare_input().unwrap();
     println!(
         "day 2 part 1: {:?}",
-        day_2_red_nosed_reports::part_1(day_2.clone())
+        day_2_red_nosed_reports::part_1(&day_2)
     );
-    println!("day 2 part 2: {:?}", day_2_red_nosed_reports::part_2(day_2));
+    println!(
+        "day 2 part 2: {:?}",
+        day_2_red_nosed_reports::part_2(&day_2)
+    );
 }

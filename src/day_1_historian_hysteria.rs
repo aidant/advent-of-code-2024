@@ -4,8 +4,7 @@ use std::{
 };
 
 use anyhow::anyhow;
-
-pub fn prepare_input() -> Result<(Vec<i32>, Vec<i32>), anyhow::Error> {
+pub fn prepare_input() -> Result<(Vec<u32>, Vec<u32>), anyhow::Error> {
     let mut left = vec![];
     let mut right = vec![];
 
@@ -18,14 +17,14 @@ pub fn prepare_input() -> Result<(Vec<i32>, Vec<i32>), anyhow::Error> {
         let l = values.next().ok_or(anyhow!("unable to take left value"))?;
         let r = values.next().ok_or(anyhow!("unable to take right value"))?;
 
-        left.push(l.parse::<i32>().unwrap());
-        right.push(r.parse::<i32>().unwrap());
+        left.push(l.parse::<u32>().unwrap());
+        right.push(r.parse::<u32>().unwrap());
     }
 
     Ok((left, right))
 }
 
-pub fn part_1(left: &Vec<i32>, right: &Vec<i32>) -> Result<i32, anyhow::Error> {
+pub fn part_1(left: &[u32], right: &[u32]) -> Result<u32, anyhow::Error> {
     let mut left = left.to_owned();
     let mut right = right.to_owned();
 
@@ -45,7 +44,7 @@ pub fn part_1(left: &Vec<i32>, right: &Vec<i32>) -> Result<i32, anyhow::Error> {
     Ok(total_distance)
 }
 
-pub fn part_2(left: &Vec<i32>, right: &Vec<i32>) -> Result<i32, anyhow::Error> {
+pub fn part_2(left: &[u32], right: &[u32]) -> Result<u32, anyhow::Error> {
     let max = right.iter().max().ok_or(anyhow!("cannot find max value"))?;
     let mut lut = vec![0; *max as usize + 1];
 

@@ -2,6 +2,7 @@
 
 mod day_1_historian_hysteria;
 mod day_2_red_nosed_reports;
+mod day_3_mull_it_over;
 
 fn main() {
     let (day_1_left, day_1_right) = day_1_historian_hysteria::prepare_input().unwrap();
@@ -23,4 +24,8 @@ fn main() {
         "day 2 part 2: {:?}",
         day_2_red_nosed_reports::part_2(&day_2)
     );
+
+    let day_3 = day_3_mull_it_over::prepare_input().unwrap();
+    println!("day 3 part 1: {:?}", day_3_mull_it_over::part_1(&day_3));
+    println!("day 3 part 2: {:?}", day_3_mull_it_over::part_2(&day_3));
 }

@@ -1,7 +1,6 @@
 use std::{
     fs::File,
     io::{BufRead, BufReader},
-    slice::Windows,
     usize,
 };
 
@@ -18,13 +17,13 @@ pub fn prepare_input() -> Result<(String, usize), anyhow::Error> {
     Ok((result.join(""), result[0].len()))
 }
 
-fn get_xy_from_string(
+pub fn get_index_from_string(
     chars: &[u8],
     width: usize,
     start: usize,
     x_offset: i32,
     y_offset: i32,
-) -> u8 {
+) -> Option<usize> {
     let x_base = start % width;
     let y_base = start / width;
 
@@ -37,13 +36,27 @@ fn get_xy_from_string(
         && (0..width).contains(&(x as usize))
         && (0..width).contains(&(y as usize))
     {
+        Some(index)
+    } else {
+        None
+    }
+}
+
+pub fn get_xy_from_string(
+    chars: &[u8],
+    width: usize,
+    start: usize,
+    x_offset: i32,
+    y_offset: i32,
+) -> u8 {
+    if let Some(index) = get_index_from_string(chars, width, start, x_offset, y_offset) {
         chars[index]
     } else {
         b' '
     }
 }
 
-fn get_substring_from_coords(
+pub fn get_substring_from_coords(
     chars: &[u8],
     width: usize,
     start: usize,
@@ -59,7 +72,7 @@ fn get_substring_from_coords(
     .to_string()
 }
 
-fn get_substring_from_vector(
+pub fn get_substring_from_vector(
     chars: &[u8],
     width: usize,
     start: usize,

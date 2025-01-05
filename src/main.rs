@@ -4,6 +4,8 @@ mod day_1_historian_hysteria;
 mod day_2_red_nosed_reports;
 mod day_3_mull_it_over;
 mod day_4_ceres_search;
+mod day_5_print_queue;
+mod day_6_guard_gallivant;
 
 fn main() {
     let (day_1_left, day_1_right) = day_1_historian_hysteria::prepare_input().unwrap();
@@ -38,5 +40,17 @@ fn main() {
     println!(
         "day 4 part 2: {:?}",
         day_4_ceres_search::part_2(&day_4_str, day_4_len)
+    );
+
+    let (day_5_rules, day_5_updates) = day_5_print_queue::prepare_input().unwrap();
+    println!(
+        "day 5 {:?}",
+        day_5_print_queue::part_1(&day_5_rules, &day_5_updates)
+    );
+
+    let (day_6_str, day_6_len) = day_6_guard_gallivant::prepare_input().unwrap();
+    println!(
+        "day 6 part 1: {:?}",
+        day_6_guard_gallivant::part_1(&day_6_str, day_6_len)
     );
 }
